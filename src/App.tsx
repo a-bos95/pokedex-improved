@@ -1,39 +1,51 @@
+import { useRef, useEffect, useState } from 'react';
 import Container from './components/Container';
 import SearchBar from './components/SearchBar';
-import MainSection from './components/MainSection';
 import SortDropdown from './components/SortDropdown';
 import RangeInput from './components/RangeInput';
 import FilterButtons from './components/FilterButtons';
+import PokemonCard from './components/PokemonCard';
+import PokemonDetail from './components/PokemonDetail';
 
 function App() {
+  const searchBarRef = useRef<HTMLDivElement>(null);
+  const [spacerHeight, setSpacerHeight] = useState(0);
+
+  useEffect(() => {
+    if (searchBarRef.current) {
+      setSpacerHeight(searchBarRef.current.offsetHeight);
+    }
+  }, []);
+
   return (
-    <>
-      <Container type="main" className="flex border border-red-500">
-
-        <Container type="div" className="flex flex-col min-w-[65%] border border-green-500">
-          <SearchBar />
-          <Container>
-          <Container type="div" className="flex items-center justify-between">
-            <SortDropdown />
-            <RangeInput />
-          </Container>
-          <FilterButtons />
-
-          <Container type="div" className="flex flex-wrap gap-4">
-            <div>CARD</div>
-            <div>CARD</div>
-            <div>CARD</div>
-            <div>CARD</div>
-            <div>CARD</div>
-          </Container>
+    <Container type="div" className="border-2 border-red-500">
+      <div className="flex gap-8 border-2 border-blue-500">
+        {/* Left Column */}
+        <Container type="div" className="flex-1 border-2 border-yellow-500">
+          <div ref={searchBarRef}>
+            <SearchBar />
+          </div>
+          <div className="border-2 border-purple-500">
+            <div className="flex items-center justify-between">
+              <SortDropdown />
+              <RangeInput />
+            </div>
+            <FilterButtons />
+            <div className="flex flex-wrap gap-4">
+              <PokemonCard number="387" name="Turtwig" types={['Grass']} />
+              <PokemonCard number="388" name="Grotle" types={['Grass']} />
+              <PokemonCard number="389" name="Torterra" types={['Grass', 'Ground']} />
+            </div>
+          </div>
         </Container>
 
-        <Container type="div" className="flex flex-col min-w-[35%] border border-blue-500">
-          <div>big card</div>
-          </Container>
+        {/* Right Column */}
+        <Container type="div" className="w-[35%] border-2 border-pink-500">
+          <div style={{ height: spacerHeight }} className="border-2 border-green-500" />
+          <PokemonDetail />
         </Container>
-      </Container>
-    </>
+      </div>
+    </Container>
   );
 }
 
