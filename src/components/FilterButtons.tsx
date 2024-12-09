@@ -1,13 +1,16 @@
 import { useState, useRef, useEffect } from 'react';
 import { TypeIcon, WeaknessIcon, AbilityIcon, HeightIcon, WeightIcon } from './Icons';
+import { twMerge } from 'tw-merge';
+import ResetButton from './ResetButton';
 
 interface FilterButtonProps {
   label: string;
   options: string[];
   icon: React.ReactNode;
+  className?: string;
 }
 
-function FilterButton({ label, options, icon }: FilterButtonProps) {
+function FilterButton({ label, options, icon, className }: FilterButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -24,10 +27,10 @@ function FilterButton({ label, options, icon }: FilterButtonProps) {
   }, []);
 
   return (
-    <div ref={dropdownRef} className="relative">
+    <div ref={dropdownRef} className={twMerge(`relative ${className}`)}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 py-2 bg-white rounded-lg shadow-sm hover:bg-gray-50 min-w-40 justify-between"
+        className="flex items-center gap-2 px-3 py-2 bg-white rounded-lg shadow-md hover:bg-gray-50 min-w-40 justify-between"
       >
         <div className="flex items-center gap-2">
           {icon}
@@ -51,7 +54,7 @@ function FilterButton({ label, options, icon }: FilterButtonProps) {
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-1 w-40 bg-white rounded-lg shadow-lg py-1 z-10">
+        <div className="absolute top-full left-0 mt-1 min-w-40 bg-white rounded-lg shadow-lg py-1 z-10">
           {options.map((option) => (
             <button
               key={option}
@@ -70,9 +73,13 @@ function FilterButton({ label, options, icon }: FilterButtonProps) {
   );
 }
 
-export default function FilterButtons() {
+interface FilterButtonsProps {
+  className?: string;
+}
+
+export default function FilterButtons({ className }: FilterButtonsProps) {
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className={twMerge(`flex gap-2 ${className}`)}>
       <FilterButton 
         label="Type" 
         options={['Normal', 'Fire', 'Water', 'Electric', 'Grass', 'Ice']}
@@ -98,6 +105,7 @@ export default function FilterButtons() {
         options={['Light', 'Medium', 'Heavy']}
         icon={<WeightIcon className="w-4 h-4 text-slate-800" />}
       />
+      <ResetButton className="flex flex-col rounded-md px-3 py-2 text-sm font-medium bg-slate-500 hover:bg-slate-600 transition-colors"/>
     </div>
   );
 }

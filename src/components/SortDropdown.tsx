@@ -1,6 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
+import { twMerge } from 'tw-merge';
 
-export default function SortDropdown() {
+interface SortDropdownProps {
+  className?: string;
+}
+
+export default function SortDropdown({ className }: SortDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState('Ascending');
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -17,7 +22,7 @@ export default function SortDropdown() {
   }, []);
 
   return (
-    <div ref={dropdownRef} className="relative">
+    <div ref={dropdownRef} className={twMerge(`relative ${className}`)}>
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 py-2"

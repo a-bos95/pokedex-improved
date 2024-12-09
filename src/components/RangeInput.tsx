@@ -1,3 +1,5 @@
+import { twMerge } from "tw-merge";
+
 interface Props {
   fromPlaceholder?: string;
   toPlaceholder?: string;
@@ -14,18 +16,18 @@ export default function RangeInput({
   className = ""
 }: Props) {
   return (
-    <div className={`flex items-center gap-2 ${className}`}>
-      <span className="text-sm text-gray-500">from</span>
+    <div className={twMerge(`flex items-center gap-2 ${className}`)}>
+      <span className="font-bold text-slate-900">from</span>
       <input 
         type="number" 
-        className="w-20 px-3 py-1 text-sm bg-white rounded-lg shadow-sm"
+        className="w-16 max-w-[4rem] px-2 py-1 text-sm bg-transparent border border-neutral-500 rounded-lg"
         placeholder={fromPlaceholder}
         onChange={(e) => onFromChange?.(e.target.value)}
       />
-      <span className="text-sm text-gray-500">to</span>
+      <span className="font-bold text-slate-900">to</span>
       <input 
         type="number" 
-        className="w-20 px-3 py-1 text-sm bg-white rounded-lg shadow-sm"
+        className="px-2 py-1 text-sm bg-transparent border border-neutral-500 rounded-lg"
         placeholder={toPlaceholder}
         onChange={(e) => onToChange?.(e.target.value)}
       />

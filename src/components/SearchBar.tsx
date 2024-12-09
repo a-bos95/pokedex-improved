@@ -1,12 +1,13 @@
-import React from 'react';
+import { twMerge } from "tw-merge";
 
 interface SearchBarProps {
   placeholder?: string;
+  className?: string;
 }
 
-function SearchBar({ placeholder = "Search your Pokémon!" }: SearchBarProps) {
+function SearchBar({ placeholder = "Search your Pokémon!", className, ...props }: SearchBarProps) {
   return (
-    <div className="relative">
+    <div className={twMerge(`relative ${className}`)} {...props}>
       <input
         type="text"
         placeholder={placeholder}

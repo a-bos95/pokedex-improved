@@ -1,6 +1,12 @@
-export default function PokemonDetail() {
+import { twMerge } from "tw-merge";
+
+interface PokemonDetailProps {
+  className?: string;
+}
+
+export default function PokemonDetail({ className }: PokemonDetailProps) {
   return (
-    <div className="bg-white rounded-xl shadow-sm p-6 sticky top-24">
+    <div className={twMerge(`bg-white rounded-xl shadow-sm p-6 ${className}`)}>
       <div className="aspect-square bg-gray-100 rounded-lg mb-6">
         {/* Pokemon image will go here */}
       </div>

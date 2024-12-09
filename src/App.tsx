@@ -8,34 +8,30 @@ import PokemonDetail from './components/PokemonDetail';
 
 function App() {
   return (
-    <Container type="div" className="border-2 border-red-500">
-      <div className="flex gap-8 border-2 border-blue-500">
-        {/* Left Column */}
-        <Container type="div" className="flex-1 border-2 border-yellow-500">
-          <Container type="div" className="border-2 border-green-500">
-            <SearchBar />
-          </Container>
-          <Container type="div" className="border-2 border-purple-500">
-            <div className="flex items-center justify-between">
-              <SortDropdown />
-              <RangeInput />
-            </div>
-            <FilterButtons />
-            <div className="flex flex-wrap gap-4">
-              <PokemonCard number="387" name="Turtwig" types={['Grass']} />
-              <PokemonCard number="388" name="Grotle" types={['Grass']} />
-              <PokemonCard number="389" name="Torterra" types={['Grass', 'Ground']} />
-            </div>
-          </Container>
-        </Container>
+    <Container type="main" className="grid grid-cols-[2fr_1fr] gap-x-2 gap-y-6 border-2 border-red-500">
+      <SearchBar className="row-start-1" />
+      <SortDropdown className="row-start-2 col-start-1" />
+      <RangeInput className="row-start-2 col-start-1 justify-self-end" />
+      <FilterButtons className="row-start-3 col-start-1" />
+      <PokemonDetail className="row-start-2 col-start-2 row-span-3" />
 
-        {/* Right Column */}
-        <Container type="aside" className="w-[35%] border-2 border-pink-500 self-start mt-[SearchBarHeight]">
-          <PokemonDetail />
-        </Container>
-      </div>
+      <Container type="div" className="row-start-4 col-start-1 grid grid-cols-3 items-center justify-center gap-4">
+        <PokemonCard number={1} name="Bulbasaur" types={["Grass", "Poison"]} />
+        <PokemonCard number={2} name="Ivysaur" types={["Grass", "Poison"]} />
+        <PokemonCard number={3} name="Venusaur" types={["Grass", "Poison"]} />
+        <PokemonCard number={4} name="Charmander" types={["Fire"]} />
+        <PokemonCard number={5} name="Charmeleon" types={["Fire"]} />
+        <PokemonCard number={6} name="Charizard" types={["Fire", "Flying"]} />
+      </Container>
     </Container>
   );
+
+  {/* <Container type="main" className="grid grid-cols-3 gap-6 auto-rows-min">
+      <SearchBar className="row-start-1 col-span-2" />
+      <PokemonDetail className="row-start-1" />
+      <SortDropdown className="row-start-2" />
+      <RangeInput className="row-start-2 justify-self-end" />
+    </Container> */}
 }
 
 export default App;
