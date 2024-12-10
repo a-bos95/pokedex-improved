@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { TypeIcon, WeaknessIcon, AbilityIcon, HeightIcon, WeightIcon } from './Icons';
+import { TypeIcon, WeaknessIcon, AbilityIcon, HeightIcon, WeightIcon, ArrowIcon } from './Icons';
 import { twMerge } from 'tw-merge';
 import ResetButton from './ResetButton';
 
@@ -34,23 +34,11 @@ function FilterButton({ label, options, icon, className }: FilterButtonProps) {
       >
         <div className="flex items-center gap-2">
           {icon}
-          <span className="font-bold text-neutral-500">
+          <span className="font-bold text-gray-400">
             {selected || label}
           </span>
         </div>
-        <svg
-          className={`w-4 h-4 text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''}`}
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M19 9l-7 7-7-7"
-          />
-        </svg>
+        <ArrowIcon className={`w-4 h-4 text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       {isOpen && (
@@ -83,27 +71,27 @@ export default function FilterButtons({ className }: FilterButtonsProps) {
       <FilterButton 
         label="Type" 
         options={['Normal', 'Fire', 'Water', 'Electric', 'Grass', 'Ice']}
-        icon={<TypeIcon className="w-4 h-4 text-slate-800" />}
+        icon={<TypeIcon className="w-4 h-4 text-gray-400" />}
       />
       <FilterButton 
         label="Weaknesses" 
         options={['Normal', 'Fire', 'Water', 'Electric', 'Grass', 'Ice']}
-        icon={<WeaknessIcon className="w-4 h-4 text-slate-800" />}
+        icon={<WeaknessIcon className="w-4 h-4 text-gray-400" />}
       />
       <FilterButton 
         label="Ability" 
         options={['Overgrow', 'Blaze', 'Torrent', 'Shield Dust']}
-        icon={<AbilityIcon className="w-4 h-4 text-slate-800" />}
+        icon={<AbilityIcon className="w-4 h-4 text-gray-400" />}
       />
       <FilterButton 
         label="Height" 
         options={['Short', 'Medium', 'Tall']}
-        icon={<HeightIcon className="w-4 h-4 text-slate-800" />}
+        icon={<HeightIcon className="w-4 h-4 text-gray-400" />}
       />
       <FilterButton 
         label="Weight" 
         options={['Light', 'Medium', 'Heavy']}
-        icon={<WeightIcon className="w-4 h-4 text-slate-800" />}
+        icon={<WeightIcon className="w-4 h-4 text-gray-400" />}
       />
       <ResetButton className="flex flex-col rounded-md px-3 py-2 text-sm font-medium bg-slate-500 hover:bg-slate-600 transition-colors"/>
     </div>

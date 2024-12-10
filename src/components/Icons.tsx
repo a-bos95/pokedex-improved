@@ -97,6 +97,22 @@ export const NewsIcon = ({ className }: Props) => (
 );
 
 // Filter Icons
+export const ArrowIcon = ({ className }: Props) => (
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M19 9l-7 7-7-7"
+  />
+</svg>
+);
+
 export const TypeIcon = ({ className }: Props) => (
   <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h10M7 12h10M7 17h10" />

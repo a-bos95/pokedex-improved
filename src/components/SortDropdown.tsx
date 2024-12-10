@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { twMerge } from 'tw-merge';
+import { ArrowIcon } from './Icons';
 
 interface SortDropdownProps {
   className?: string;
@@ -25,26 +26,14 @@ export default function SortDropdown({ className }: SortDropdownProps) {
     <div ref={dropdownRef} className={twMerge(`relative ${className}`)}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 py-2"
+        className="flex items-center min-w-32 gap-1"
       >
         <span className="font-bold text-slate-900">{selected}</span>
-        <svg
-          className={`w-5 h-5 text-slate-900 transition-transform ${isOpen ? 'rotate-180' : ''}`}
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M19 9l-7 7-7-7"
-          />
-        </svg>
+        <ArrowIcon className={`w-5 h-5 text-slate-900 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       {isOpen && (
-        <div className="absolute top-full mt-1 w-full bg-white rounded-lg shadow-lg py-1 z-10">
+        <div className="absolute top-full left-0 w-32 bg-white rounded-lg shadow-lg pb-1 z-10">
           {['Ascending', 'Descending'].map((option) => (
             <button
               key={option}

@@ -15,7 +15,7 @@ function App() {
       <FilterButtons className="row-start-3 col-start-1" />
       <PokemonDetail className="row-start-2 col-start-2 row-span-3" />
 
-      <Container type="div" className="row-start-4 col-start-1 grid grid-cols-3 items-center justify-center gap-4">
+      <Container type="div" className="row-start-4 col-start-1 grid grid-cols-3 items-center justify-center gap-x-4 gap-y-12 mt-12">
         <PokemonCard number={1} name="Bulbasaur" types={["Grass", "Poison"]} />
         <PokemonCard number={2} name="Ivysaur" types={["Grass", "Poison"]} />
         <PokemonCard number={3} name="Venusaur" types={["Grass", "Poison"]} />
