@@ -6,12 +6,12 @@ import FilterButtons from './components/FilterButtons';
 import PokemonCard from './components/PokemonCard';
 import PokemonDetail from './components/PokemonDetail';
 import { useEffect, useState } from 'react';
-import { Pokemon, PokemonListResponse } from './types/pokemon';
-import { getPokemonList, getPokemonDetails } from './services/pokemon';
+import { Pokemon } from './types/pokemon';
+import { getPokemonList } from './utils/dataFetcher';
 
 function App() {
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -19,18 +19,8 @@ function App() {
       try {
         setIsLoading(true);
         setError(null);
-        
-        // Get initial list
-        const listData: PokemonListResponse = await getPokemonList(2000, 0);
-        
-        // Fetch details for each Pokemon
-        const detailsPromises = listData.results.map(p => 
-          getPokemonDetails(p.name)
-        );
-        
-        const pokemonDetails = await Promise.all(detailsPromises);
-        setPokemons(pokemonDetails);
-        console.log(pokemonDetails);
+        const pokemonsWithDetails = await getPokemonList(20, 0, true) as Pokemon[];
+        setPokemons(pokemonsWithDetails);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to fetch Pokemon');
       } finally {
@@ -54,7 +44,7 @@ function App() {
 
       <Container type="div" className="row-start-4 col-start-1 grid grid-cols-3 items-center justify-center gap-x-4 gap-y-12 mt-12">
         {pokemons.map((pokemon) => (
-          <PokemonCard pokemon={pokemon} />
+          <PokemonCard pokemon={pokemon} key={pokemon.id} />
         ))}
       </Container>
     </Container>
