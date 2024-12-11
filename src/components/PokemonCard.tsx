@@ -1,4 +1,4 @@
-import { Pokemon, PokemonType } from '../types/pokemon';
+import { Pokemon } from '../types/pokemon';
 import CardTag from './CardTag';
 import { twMerge } from 'tailwind-merge';
 
@@ -21,7 +21,7 @@ export default function PokemonCard({ pokemon, className }: CardProps) {
       </div>
       <div className="flex flex-col items-center">
         <span className="text-sm font-bold text-gray-400">N°{pokemon.id}</span>
-        <h3 className="font-bold text-slate-900">{pokemon.name}</h3>
+        <h3 className="font-bold text-lg capitalize text-slate-900">{pokemon.name}</h3>
         <div className="flex gap-2 mt-3">
           {pokemon.types.map(({ type }) => (
             <CardTag key={type.name} type={type} />
