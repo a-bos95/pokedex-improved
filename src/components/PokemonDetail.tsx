@@ -71,7 +71,7 @@ export default function PokemonDetail({ className }: PokemonDetailProps) {
               <div className="flex flex-col items-center gap-1 flex-1">
                 <h3 className="font-bold text-slate-800 uppercase tracking-wide">Base Exp</h3>
                 <span className="w-full py-2 font-bold bg-gray-100 text-slate-800 border border-red-500 rounded-full tracking-wide text-center">
-                  10.2 kg
+                  239
                 </span>
               </div>
           </div>

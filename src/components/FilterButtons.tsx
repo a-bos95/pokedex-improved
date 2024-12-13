@@ -2,18 +2,23 @@ import { useState, useRef, useEffect } from 'react';
 import { TypeIcon, WeaknessIcon, AbilityIcon, HeightIcon, WeightIcon, ArrowIcon } from './Icons';
 import { twMerge } from 'tw-merge';
 import ResetButton from './ResetButton';
+import { usePokeAPI } from '../hooks/usePokeAPI';
+import { APIListResponse, NamedAPIResource } from '../types/api';
 
 interface FilterButtonProps {
   label: string;
-  options: string[];
+  options?: string[];
   icon: React.ReactNode;
   className?: string;
+  endpoint: string;
 }
 
-function FilterButton({ label, options, icon, className }: FilterButtonProps) {
+function FilterButton({ label, options, icon, className, endpoint }: FilterButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  
+  const { data, isLoading, error } = usePokeAPI<APIListResponse<NamedAPIResource>>(endpoint);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -43,18 +48,24 @@ function FilterButton({ label, options, icon, className }: FilterButtonProps) {
 
       {isOpen && (
         <div className="absolute top-full left-0 mt-1 min-w-40 bg-white rounded-lg shadow-lg py-1 z-10">
-          {options.map((option) => (
-            <button
-              key={option}
-              onClick={() => {
-                setSelected(option);
-                setIsOpen(false);
-              }}
-              className={`w-full px-4 py-2 text-left text-sm hover:bg-gray-50 text-neutral-500`}
-            >
-              {option}
-            </button>
-          ))}
+          {isLoading ? (
+            <div className="px-4 py-2 text-sm text-gray-500">Loading...</div>
+          ) : error ? (
+            <div className="px-4 py-2 text-sm text-red-500">Error loading options</div>
+          ) : (
+            data?.results.map((item) => (
+              <button
+                key={item.name}
+                onClick={() => {
+                  setSelected(item.name);
+                  setIsOpen(false);
+                }}
+                className={`w-full px-4 py-2 text-left text-sm hover:bg-gray-50 text-neutral-500`}
+              >
+                {item.name}
+              </button>
+            ))
+          )}
         </div>
       )}
     </div>
@@ -70,27 +81,27 @@ export default function FilterButtons({ className }: FilterButtonsProps) {
     <div className={twMerge(`flex gap-2 ${className}`)}>
       <FilterButton 
         label="Type" 
-        options={['Normal', 'Fire', 'Water', 'Electric', 'Grass', 'Ice']}
+        endpoint="type"
         icon={<TypeIcon className="w-4 h-4 text-gray-400" />}
       />
       <FilterButton 
         label="Weaknesses" 
-        options={['Normal', 'Fire', 'Water', 'Electric', 'Grass', 'Ice']}
+        endpoint="type"
         icon={<WeaknessIcon className="w-4 h-4 text-gray-400" />}
       />
       <FilterButton 
         label="Ability" 
-        options={['Overgrow', 'Blaze', 'Torrent', 'Shield Dust']}
+        endpoint="ability"
         icon={<AbilityIcon className="w-4 h-4 text-gray-400" />}
       />
       <FilterButton 
         label="Height" 
-        options={['Short', 'Medium', 'Tall']}
+        endpoint="pokemon-shape"  // TODO: Use appropriate endpoint for height
         icon={<HeightIcon className="w-4 h-4 text-gray-400" />}
       />
       <FilterButton 
         label="Weight" 
-        options={['Light', 'Medium', 'Heavy']}
+        endpoint="pokemon-shape"  // TODO: Use appropriate endpoint for weight
         icon={<WeightIcon className="w-4 h-4 text-gray-400" />}
       />
       <ResetButton className="flex flex-col rounded-md px-3 py-2 text-sm font-medium bg-slate-500 hover:bg-slate-600 transition-colors"/>
