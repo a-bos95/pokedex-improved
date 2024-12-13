@@ -4,6 +4,7 @@ import { twMerge } from 'tw-merge';
 import ResetButton from './ResetButton';
 import { usePokeAPI } from '../hooks/usePokeAPI';
 import { APIListResponse, NamedAPIResource } from '../types/api';
+import { useSearchParams } from 'react-router-dom';
 
 interface FilterButtonProps {
   label: string;
@@ -17,6 +18,7 @@ function FilterButton({ label, options, icon, className, endpoint }: FilterButto
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [searchParams, setSearchParams] = useSearchParams();
   
   const { data, isLoading, error } = usePokeAPI<APIListResponse<NamedAPIResource>>(endpoint);
 
@@ -58,6 +60,8 @@ function FilterButton({ label, options, icon, className, endpoint }: FilterButto
                 key={item.name}
                 onClick={() => {
                   setSelected(item.name);
+                  searchParams.set(endpoint, item.name);
+                  setSearchParams(searchParams);
                   setIsOpen(false);
                 }}
                 className={`w-full px-4 py-2 text-left text-sm hover:bg-gray-50 text-neutral-500`}
