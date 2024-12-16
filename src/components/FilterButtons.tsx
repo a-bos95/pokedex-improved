@@ -4,7 +4,6 @@ import { twMerge } from 'tw-merge';
 import ResetButton from './ResetButton';
 import { usePokeAPI } from '../hooks/usePokeAPI';
 import { APIListResponse, NamedAPIResource } from '../types/api';
-import { useSearchParams } from 'react-router-dom';
 
 interface FilterButtonProps {
   label: string;
@@ -12,15 +11,36 @@ interface FilterButtonProps {
   icon: React.ReactNode;
   className?: string;
   endpoint: string;
+  onFilterChange: (filter: { type: string; url: string } | null) => void;
+  activeFilter: { type: string; url: string } | null;
 }
 
-function FilterButton({ label, options, icon, className, endpoint }: FilterButtonProps) {
+function FilterButton({ 
+  label, 
+  icon, 
+  className, 
+  endpoint,
+  onFilterChange,
+  activeFilter 
+}: FilterButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState<string | null>(null);
+  const [filterOptions, setFilterOptions] = useState<NamedAPIResource[]>([]);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const [searchParams, setSearchParams] = useSearchParams();
   
-  const { data, isLoading, error } = usePokeAPI<APIListResponse<NamedAPIResource>>(endpoint);
+  const { fetchData, isLoading, error } = usePokeAPI<{results: NamedAPIResource[]}>(endpoint, {
+    withDetails: false
+  });
+
+  useEffect(() => {
+    fetchData().then(data => {
+      if (data) setFilterOptions(data.results);
+    });
+  }, []);
+
+  const handleFilterSelect = (item: NamedAPIResource) => {
+    onFilterChange({ type: endpoint, url: item.url });
+    setIsOpen(false);
+  };
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -33,6 +53,11 @@ function FilterButton({ label, options, icon, className, endpoint }: FilterButto
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  const isSelected = activeFilter?.type === endpoint;
+  const selectedName = isSelected 
+    ? filterOptions.find(opt => opt.url === activeFilter.url)?.name 
+    : null;
+
   return (
     <div ref={dropdownRef} className={twMerge(`relative ${className}`)}>
       <button
@@ -42,7 +67,7 @@ function FilterButton({ label, options, icon, className, endpoint }: FilterButto
         <div className="flex items-center gap-2">
           {icon}
           <span className="font-bold text-gray-400">
-            {selected || label}
+            {selectedName || label}
           </span>
         </div>
         <ArrowIcon className={`w-4 h-4 text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
@@ -55,15 +80,10 @@ function FilterButton({ label, options, icon, className, endpoint }: FilterButto
           ) : error ? (
             <div className="px-4 py-2 text-sm text-red-500">Error loading options</div>
           ) : (
-            data?.results.map((item) => (
+            filterOptions.map((item: NamedAPIResource) => (
               <button
                 key={item.name}
-                onClick={() => {
-                  setSelected(item.name);
-                  searchParams.set(endpoint, item.name);
-                  setSearchParams(searchParams);
-                  setIsOpen(false);
-                }}
+                onClick={() => handleFilterSelect(item)}
                 className={`w-full px-4 py-2 text-left text-sm hover:bg-gray-50 text-neutral-500`}
               >
                 {item.name}
@@ -78,37 +98,52 @@ function FilterButton({ label, options, icon, className, endpoint }: FilterButto
 
 interface FilterButtonsProps {
   className?: string;
+  onFilterChange: (filter: { type: string; url: string } | null) => void;
+  activeFilter: { type: string; url: string } | null;
 }
 
-export default function FilterButtons({ className }: FilterButtonsProps) {
+export default function FilterButtons({ className, onFilterChange, activeFilter }: FilterButtonsProps) {
   return (
     <div className={twMerge(`flex gap-2 ${className}`)}>
       <FilterButton 
         label="Type" 
         endpoint="type"
         icon={<TypeIcon className="w-4 h-4 text-gray-400" />}
+        onFilterChange={onFilterChange}
+        activeFilter={activeFilter}
       />
       <FilterButton 
         label="Weaknesses" 
         endpoint="type"
         icon={<WeaknessIcon className="w-4 h-4 text-gray-400" />}
+        onFilterChange={onFilterChange}
+        activeFilter={activeFilter}
       />
       <FilterButton 
         label="Ability" 
         endpoint="ability"
         icon={<AbilityIcon className="w-4 h-4 text-gray-400" />}
+        onFilterChange={onFilterChange}
+        activeFilter={activeFilter}
       />
       <FilterButton 
         label="Height" 
         endpoint="pokemon-shape"  // TODO: Use appropriate endpoint for height
         icon={<HeightIcon className="w-4 h-4 text-gray-400" />}
+        onFilterChange={onFilterChange}
+        activeFilter={activeFilter}
       />
       <FilterButton 
         label="Weight" 
         endpoint="pokemon-shape"  // TODO: Use appropriate endpoint for weight
         icon={<WeightIcon className="w-4 h-4 text-gray-400" />}
+        onFilterChange={onFilterChange}
+        activeFilter={activeFilter}
       />
-      <ResetButton className="flex flex-col rounded-md px-3 py-2 text-sm font-medium bg-slate-500 hover:bg-slate-600 transition-colors"/>
+      <ResetButton 
+        className="flex flex-col rounded-md px-3 py-2 text-sm font-medium bg-slate-500 hover:bg-slate-600 transition-colors"
+        onClick={() => onFilterChange(null)}
+      />
     </div>
   );
 }
