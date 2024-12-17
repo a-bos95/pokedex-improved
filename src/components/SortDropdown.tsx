@@ -4,11 +4,12 @@ import { ArrowIcon } from './Icons';
 
 interface SortDropdownProps {
   className?: string;
+  onSort: (order: 'asc' | 'desc') => void;
 }
 
-export default function SortDropdown({ className }: SortDropdownProps) {
+export default function SortDropdown({ className, onSort }: SortDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState('Ascending');
+  const [selected, setSelected] = useState<'Ascending' | 'Descending'>('Ascending');
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -21,6 +22,12 @@ export default function SortDropdown({ className }: SortDropdownProps) {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  const handleSort = (option: 'Ascending' | 'Descending') => {
+    setSelected(option);
+    onSort(option === 'Ascending' ? 'asc' : 'desc');
+    setIsOpen(false);
+  };
 
   return (
     <div ref={dropdownRef} className={twMerge(`relative ${className}`)}>
@@ -37,10 +44,7 @@ export default function SortDropdown({ className }: SortDropdownProps) {
           {['Ascending', 'Descending'].map((option) => (
             <button
               key={option}
-              onClick={() => {
-                setSelected(option);
-                setIsOpen(false);
-              }}
+              onClick={() => handleSort(option as 'Ascending' | 'Descending')}
               className={`w-full px-4 py-2 text-left hover:bg-gray-50 ${
                 selected === option ? 'font-bold text-slate-900' : 'text-slate-600'
               }`}
