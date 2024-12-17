@@ -91,6 +91,10 @@ function App() {
     setFilteredList(sortPokemon(filteredByRange, sortOrder));
   };
 
+  const handlePokemonSelect = (pokemon: Pokemon) => {
+    setSelectedPokemon(pokemon);
+  };
+
   return (
     <>
       <Container type="main" className="grid grid-cols-[2fr_1fr] gap-x-4 gap-y-6">
@@ -112,13 +116,21 @@ function App() {
             <div>Error: {error}</div>
           ) : filteredList.length > 0 ? (
             filteredList.map((pokemon) => (
-              <PokemonCard key={pokemon.id} pokemon={pokemon} />
+              <PokemonCard 
+                key={pokemon.id} 
+                pokemon={pokemon}
+                onClick={() => handlePokemonSelect(pokemon)}
+                selected={selectedPokemon?.id === pokemon.id}
+              />
             ))
           ) : (
             <div className="col-span-3 text-center text-gray-500">No Pokémon found</div>
           )}
         </Container>
-        <PokemonDetail className="row-start-2 col-start-2 row-span-4" />
+        <PokemonDetail 
+          className="row-start-2 col-start-2 row-span-4" 
+          pokemon={selectedPokemon}
+        />
       </Container>
     </>
   );

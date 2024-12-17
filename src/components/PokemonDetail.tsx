@@ -1,32 +1,45 @@
 import { twMerge } from "tw-merge";
+import { Pokemon } from "../types/api";
 import CardTag from "./CardTag";
 import { ArrowIcon } from "./Icons";
 
 interface PokemonDetailProps {
   className?: string;
+  pokemon: Pokemon | null;
 }
 
-export default function PokemonDetail({ className }: PokemonDetailProps) {
+export default function PokemonDetail({ className, pokemon }: PokemonDetailProps) {
+  if (!pokemon) {
+    return (
+      <div className={twMerge(`bg-white rounded-xl shadow-sm p-6 relative ${className}`)}>
+        <div className="h-full flex items-center justify-center text-gray-400">
+          Select a Pokemon to see details
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className={twMerge(`bg-white rounded-xl shadow-sm p-6 ${className}`)}>
-      <div className="w-full flex justify-center -mt-12 mb-6">
-        <div className="w-56 h-56">
+    <div className={twMerge(`bg-white rounded-xl shadow-sm p-6 relative ${className}`)}>
+      <div className="absolute left-1/2 -translate-x-1/2 -top-12">
+        <div className="w-48 h-48">
           <img 
-            src="https://placehold.co/256x256"
-            alt="placeholder"
+            src={pokemon.sprites.other?.["official-artwork"].front_default || pokemon.sprites.front_default}
+            alt={pokemon.name}
             className="w-full h-full object-contain"
           />
         </div>
       </div>
-      <div className="space-y-4">
-        <div className="flex flex-col items-center text-center">
-          <span className="text-sm text-gray-400">N°387</span>
-          <h2 className="text-2xl font-bold text-slate-800">Turtwig</h2>
-          <span className="text-sm text-gray-400">Emperor Pokémon</span>
+      <div className="space-y-4 pt-40">
+        <div className="flex flex-col items-center">
+          <span className="text-sm font-bold text-gray-400">N°{pokemon.id}</span>
+          <h2 className="text-2xl font-bold text-slate-900">{pokemon.name}</h2>
+          <span className="text-sm text-gray-400">{pokemon.species?.name} Pokémon</span>
         </div>
         <div className="flex gap-2 justify-center">
-          <CardTag type={{ name: 'grass' }} />
-          <CardTag type={{ name: 'poison' }} />
+          {pokemon.types.map((type) => (
+            <CardTag key={type.type.name} type={type.type} />
+          ))}
         </div>
         <div className="flex flex-col items-center gap-2 text-center">
           <h3 className="font-bold text-slate-900 uppercase tracking-wide">Pokedex Entry</h3>

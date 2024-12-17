@@ -2,14 +2,24 @@ import { Pokemon } from '../types/pokemon';
 import CardTag from './CardTag';
 import { twMerge } from 'tailwind-merge';
 
-interface CardProps {
+interface PokemonCardProps {
   pokemon: Pokemon;
+  onClick?: () => void;
+  selected?: boolean;
   className?: string;
 }
 
-export default function PokemonCard({ pokemon, className }: CardProps) {
+export default function PokemonCard({ pokemon, onClick, selected, className }: PokemonCardProps) {
   return (
-    <div className={twMerge(`relative bg-white rounded-xl shadow-sm p-4 w-full ${className}`)}>
+    <div 
+      onClick={onClick}
+      className={twMerge(`
+        bg-white rounded-xl shadow-sm p-4 cursor-pointer
+        transition-transform hover:scale-105
+        ${selected ? 'ring-2 ring-blue-500' : ''}
+        ${className}
+      `)}
+    >
       <div className="w-full flex justify-center -mt-12 mb-6">
         <div className="w-24 h-24">
           <img 
