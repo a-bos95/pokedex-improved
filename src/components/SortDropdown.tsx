@@ -26,7 +26,7 @@ export default function SortDropdown({ className }: SortDropdownProps) {
     <div ref={dropdownRef} className={twMerge(`relative ${className}`)}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center min-w-32 gap-1"
+        className="flex items-center w-32 gap-1"
       >
         <span className="font-bold text-slate-900">{selected}</span>
         <ArrowIcon className={`w-5 h-5 text-slate-900 transition-transform ${isOpen ? 'rotate-180' : ''}`} />

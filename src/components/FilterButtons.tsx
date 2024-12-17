@@ -3,7 +3,7 @@ import { TypeIcon, WeaknessIcon, AbilityIcon, HeightIcon, WeightIcon, ArrowIcon 
 import { twMerge } from 'tw-merge';
 import ResetButton from './ResetButton';
 import { usePokeAPI } from '../hooks/usePokeAPI';
-import { APIListResponse, NamedAPIResource } from '../types/api';
+import { NamedAPIResource } from '../types/api';
 
 interface FilterButtonProps {
   label: string;
